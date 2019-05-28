@@ -9,11 +9,11 @@ app = Flask(__name__)
 def save_person_detection_data():
     if request.method == 'POST':
         json_data = request.get_json(force=True)
-        print(json_data["bounding_box"])
-        nparr = np.fromstring(base64.b64decode(json_data["clipped_image"]), dtype=np.uint8)
-        print(nparr)
-        img = cv2.imdecode(nparr, cv2.IMREAD_ANYCOLOR)
-        print(img)
-        #cv2.imwrite("clipped.png", img);
+        img_data = base64.b64decode(json_data["clipped_image"])
+        nparr = np.fromstring(img_data, dtype=np.uint8)
+        w = json_data["bounding_box"]["w"]
+        h = json_data["bounding_box"]["h"]
+        nparr = nparr.reshape(int(h), int(w))
+        cv2.imwrite("clipped.png", nparr);
         return "abc"
 

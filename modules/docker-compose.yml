@@ -1,0 +1,28 @@
+version: '3.5'
+services:
+    api-dev:
+        build: .
+        ports:
+            - "4000:4000"
+        volumes:
+            - .:/usr/src/app
+            - ${GAC_PATH}:/usr/gac
+        environment:
+            - ENV=development
+            - PORT=4000
+            - DB=mongodb://mongodb:27017/sysaster-dev
+            - GOOGLE_APPLICATION_CREDENTIALS=/usr/gac/${GAC_FILE}
+    mongodb:
+        image: mongo:latest
+        container_name: "mongodb"
+        environment:
+            - MONGO_DATA_DIR=/usr/data/db
+            - MONGO_LOG_DIR=/dev/null
+        volumes:
+            - ./data/db:/usr/data/db
+        ports:
+            - 27017:27017
+        command: mongod --smallfiles --logpath=/dev/null # --quiet
+networks:
+    default:
+        name: api_dev

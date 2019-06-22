@@ -11,9 +11,7 @@ class ErrorCode(Enum):
 @app.route("/topics", methods=['POST', 'GET'])
 def topic():
     '''
-    Create a topic in the database, that will be
-    available to be used in the notifications
-    service.
+    Manage topics.
     '''
     if request.method == 'GET':
         query = request.args
@@ -37,9 +35,7 @@ def topic():
 
         if  code is not None and \
             date is not None and \
-            name is not None and \
-            lat is not None and \
-            lon is not None:
+            name is not None:
             mongo.db.topics.insert_one(data)
             return jsonify({'ok': True, 'msg': 'Topic created successfully'}), 200
         else:
